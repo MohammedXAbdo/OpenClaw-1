@@ -6,7 +6,11 @@
 	<dict>
 		<key>Resources/ASSETS.ZIP</key>
 		<data>
-		DuG2Z5AX6bNS59jEKexp6YLDLVA=
+		f2j4dlnV4SFlZIQgBMoUVdMASfI=
+		</data>
+		<key>Resources/CLAW.REZ</key>
+		<data>
+		N3NMfyGote1QS46NRnNLUzNm5Q0=
 		</data>
 		<key>Resources/MENU.xml</key>
 		<data>
@@ -52,7 +56,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			M64xsZDh5z4tfZvYQFLmIUNxPy84Sok5/K2awb9Ns9Y=
+			cM0Eiz7RhtJqOHd9r4q9csK+T8Mdt+ac7ej1MTb4rno=
+			</data>
+		</dict>
+		<key>Resources/CLAW.REZ</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			FKTKMBDfQjXBOeGY/X3YI5OqG59Q0e8P1sPdw9fyn5w=
 			</data>
 		</dict>
 		<key>Resources/MENU.xml</key>
