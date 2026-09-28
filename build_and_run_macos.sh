@@ -14,9 +14,9 @@ cd "$(dirname "$0")"
 BREW_PREFIX="$(brew --prefix)"
 CORES="$(sysctl -n hw.ncpu)"
 
-echo ">>> Ensuring SDL2 dependencies are installed..."
-brew list --versions sdl2 sdl2_image sdl2_mixer sdl2_ttf sdl2_gfx >/dev/null 2>&1 \
-  || brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf sdl2_gfx
+echo ">>> Ensuring dependencies are installed..."
+brew list --versions cmake sdl2 sdl2_image sdl2_mixer sdl2_ttf sdl2_gfx >/dev/null 2>&1 \
+  || brew install cmake sdl2 sdl2_image sdl2_mixer sdl2_ttf sdl2_gfx
 
 echo ">>> Configuring (CMake)..."
 mkdir -p build
