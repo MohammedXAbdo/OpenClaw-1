@@ -101,7 +101,8 @@ void LocalAmbientSoundComponent::PlayAmbientSound()
 #endif
 
     shared_ptr<Mix_Chunk> pSound = WavResourceLoader::LoadAndReturnSound(m_Properties.sound.c_str());
-    assert(pSound != nullptr);
+    if (pSound)
+    {
 
 #ifndef __EMSCRIPTEN__
     int globalVolume = (int)((((float)g_pApp->GetAudio()->GetSoundVolume()) / 100.0f) * (float)MIX_MAX_VOLUME);
@@ -116,6 +117,7 @@ void LocalAmbientSoundComponent::PlayAmbientSound()
 
     // Set positional properties
     UpdateAmbientSound();
+    }
 }
 
 void LocalAmbientSoundComponent::StopAmbientSound()

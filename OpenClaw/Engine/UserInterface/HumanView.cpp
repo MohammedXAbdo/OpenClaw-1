@@ -633,8 +633,10 @@ void HumanView::RequestPlaySoundDelegate(IEventDataPtr pEventData)
             if (play)
             {
                 shared_ptr<Mix_Chunk> pSound = WavResourceLoader::LoadAndReturnSound(pSoundInfo->soundToPlay.c_str());
-                assert(pSound != nullptr);
-                g_pApp->GetAudio()->PlaySound(pSound.get(), soundProperties);
+                if (pSound)
+                {
+                    g_pApp->GetAudio()->PlaySound(pSound.get(), soundProperties);
+                }
             }
         }
     }

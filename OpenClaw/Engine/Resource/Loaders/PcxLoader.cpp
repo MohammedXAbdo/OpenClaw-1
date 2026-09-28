@@ -28,9 +28,12 @@ shared_ptr<Image> PcxResourceLoader::LoadAndReturnImage(const char* resourceStri
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceCache()->GetHandle(&resource);
-    //shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
-    assert(handle != nullptr);
+    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!handle)
+    {
+        LOG_ERROR("Could not load image resource: " + ToStr(resourceString));
+        return nullptr;
+    }
 
     shared_ptr<PcxResourceExtraData> extraData = std::static_pointer_cast<PcxResourceExtraData>(handle->GetExtraData());
     if (!extraData)

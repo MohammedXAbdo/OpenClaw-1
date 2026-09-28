@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "AniLoader.h"
 #include "ResourceCorrection.h"
-
+#include "../ResourceMgr.h"
 #include "../../GameApp/BaseGameApp.h"
 
 //=================================================================================================
@@ -50,9 +50,14 @@ WapAni* AniResourceLoader::LoadAndReturnAni(const char* resourceString)
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceCache()->GetHandle(&resource);
-    shared_ptr<AniResourceExtraData> extraData = std::static_pointer_cast<AniResourceExtraData>(handle->GetExtraData());
+    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!handle)
+    {
+        LOG_ERROR("Could not load ANI resource: " + ToStr(resourceString));
+        return NULL;
+    }
 
+    shared_ptr<AniResourceExtraData> extraData = std::static_pointer_cast<AniResourceExtraData>(handle->GetExtraData());
     if (!extraData)
     {
         LOG_ERROR("Could not cast type to AniResourceExtraData. Check if AniResourceLoader is registered. Resource: " + ToStr(resourceString));

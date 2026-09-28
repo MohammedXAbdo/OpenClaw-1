@@ -1,5 +1,5 @@
 #include "PalLoader.h"
-
+#include "../ResourceMgr.h"
 #include "../../GameApp/BaseGameApp.h"
 
 //=================================================================================================
@@ -47,12 +47,17 @@ WapPal* PalResourceLoader::LoadAndReturnPal(const char* resourceString)
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceCache()->GetHandle(&resource);
-    shared_ptr<PalResourceExtraData> extraData = std::static_pointer_cast<PalResourceExtraData>(handle->GetExtraData());
+    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!handle)
+    {
+        LOG_ERROR("Could not load palette resource: " + ToStr(resourceString));
+        return NULL;
+    }
 
+    shared_ptr<PalResourceExtraData> extraData = std::static_pointer_cast<PalResourceExtraData>(handle->GetExtraData());
     if (!extraData)
     {
-        LOG_ERROR("Could not cast type to PalResourceExtraData. Check if PalResourceLoader is registered.");
+        LOG_ERROR("Could not cast type to PalResourceExtraData. Check if PalResourceLoader is registered: " + ToStr(resourceString));
         return NULL;
     }
 

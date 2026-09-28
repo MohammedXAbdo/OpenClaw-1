@@ -1,5 +1,5 @@
 #include "PidLoader.h"
-
+#include "../ResourceMgr.h"
 #include "../../Graphics2D/Image.h"
 #include "../../GameApp/BaseGameApp.h"
 #include "ResourceCorrection.h"
@@ -52,7 +52,13 @@ WapPid* PidResourceLoader::LoadAndReturnPid(const char* resourceString, WapPal* 
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceCache()->GetHandle(&resource);
+    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!handle)
+    {
+        LOG_ERROR("Could not load PID resource: " + ToStr(resourceString));
+        return NULL;
+    }
+
     shared_ptr<PidResourceExtraData> extraData = std::static_pointer_cast<PidResourceExtraData>(handle->GetExtraData());
 
     if (!extraData)
@@ -76,7 +82,13 @@ shared_ptr<Image> PidResourceLoader::LoadAndReturnImage(const char* resourceStri
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceCache()->GetHandle(&resource);
+    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!handle)
+    {
+        LOG_ERROR("Could not load PID image resource: " + ToStr(resourceString));
+        return NULL;
+    }
+
     shared_ptr<PidResourceExtraData> extraData = std::static_pointer_cast<PidResourceExtraData>(handle->GetExtraData());
 
     if (!extraData)

@@ -1,6 +1,7 @@
 #include "AnimationComponent.h"
 #include "../Actor.h"
 #include "../../GameApp/BaseGameApp.h"
+#include "../../Resource/ResourceMgr.h"
 #include "../../Resource/Loaders/AniLoader.h"
 #include "RenderComponent.h"
 #include "PositionComponent.h"
@@ -35,7 +36,7 @@ bool AnimationComponent::VInit(TiXmlElement* data)
         // TODO: Rework. Consult with RenderComponent.cpp for proper fast implementation.
         // Take the algo from there and make it general purpose, dont copy-paste stuff
         std::vector<std::string> matchingAnimNames =
-            g_pApp->GetResourceCache()->Match(animationsPath);
+            g_pApp->GetResourceMgr()->VMatch(animationsPath);
 
         for (std::string& animPath : matchingAnimNames)
         {

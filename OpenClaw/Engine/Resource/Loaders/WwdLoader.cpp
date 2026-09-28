@@ -1,5 +1,5 @@
 #include "WwdLoader.h"
-
+#include "../ResourceMgr.h"
 #include "../../GameApp/BaseGameApp.h"
 //#include "../../Converters.h"
 #include "../../Interfaces.h"
@@ -51,12 +51,17 @@ WapWwd* WwdResourceLoader::LoadAndReturnWwd(const char* resourceString)
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> wwdHandle = g_pApp->GetResourceCache()->GetHandle(&resource);
-    shared_ptr<WwdResourceExtraData> extraData = std::static_pointer_cast<WwdResourceExtraData>(wwdHandle->GetExtraData());
+    shared_ptr<ResourceHandle> wwdHandle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!wwdHandle)
+    {
+        LOG_ERROR("Could not load WWD resource: " + ToStr(resourceString));
+        return NULL;
+    }
 
+    shared_ptr<WwdResourceExtraData> extraData = std::static_pointer_cast<WwdResourceExtraData>(wwdHandle->GetExtraData());
     if (!extraData)
     {
-        LOG_ERROR("Could not cast type to WwdResourceExtraData. Check if WwdResourceLoader is registered.");
+        LOG_ERROR("Could not cast type to WwdResourceExtraData. Check if WwdResourceLoader is registered: " + ToStr(resourceString));
         return NULL;
     }
 

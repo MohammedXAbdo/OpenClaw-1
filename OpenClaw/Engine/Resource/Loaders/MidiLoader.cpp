@@ -1,5 +1,5 @@
 #include "MidiLoader.h"
-
+#include "../ResourceMgr.h"
 #include "../../GameApp/BaseGameApp.h"
 
 //=================================================================================================
@@ -69,12 +69,17 @@ shared_ptr<MidiFile> MidiResourceLoader::LoadAndReturnMidiFile(const char* resou
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceCache()->GetHandle(&resource);
-    shared_ptr<MidiResourceExtraData> extraData = std::static_pointer_cast<MidiResourceExtraData>(handle->GetExtraData());
+    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!handle)
+    {
+        LOG_WARNING("Could not load MIDI resource: " + ToStr(resourceString));
+        return NULL;
+    }
 
+    shared_ptr<MidiResourceExtraData> extraData = std::static_pointer_cast<MidiResourceExtraData>(handle->GetExtraData());
     if (!extraData)
     {
-        LOG_ERROR("Could not cast type to MidiResourceExtraData. Check if MidiResourceLoader is registered.");
+        LOG_ERROR("Could not cast type to MidiResourceExtraData: " + ToStr(resourceString));
         return NULL;
     }
 

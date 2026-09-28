@@ -1,5 +1,5 @@
 #include "WavLoader.h"
-
+#include "../ResourceMgr.h"
 #include "../../GameApp/BaseGameApp.h"
 
 //=================================================================================================
@@ -70,13 +70,18 @@ shared_ptr<Mix_Chunk> WavResourceLoader::LoadAndReturnSound(const char* resource
 {
     Resource resource(resourceString);
 
-    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceCache()->GetHandle(&resource);
-    shared_ptr<WavResourceExtraData> extraData = std::static_pointer_cast<WavResourceExtraData>(handle->GetExtraData());
+    shared_ptr<ResourceHandle> handle = g_pApp->GetResourceMgr()->VGetHandle(&resource);
+    if (!handle)
+    {
+        LOG_WARNING("Sound resource not found: " + ToStr(resourceString));
+        return nullptr;
+    }
 
+    shared_ptr<WavResourceExtraData> extraData = std::static_pointer_cast<WavResourceExtraData>(handle->GetExtraData());
     if (!extraData)
     {
-        LOG_ERROR("Could not cast type to WavResourceExtraData. Check if WavResourceLoader is registered.");
-        return NULL;
+        LOG_ERROR("Could not cast type to WavResourceExtraData: " + ToStr(resourceString));
+        return nullptr;
     }
 
     return extraData->GetSound();

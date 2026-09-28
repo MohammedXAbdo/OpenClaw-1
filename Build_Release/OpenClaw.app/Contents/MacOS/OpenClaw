@@ -1,0 +1,25 @@
+#!/bin/bash
+BUNDLE_DIR="$(cd "$(dirname "$0")/../Resources" && pwd)"
+cd "${BUNDLE_DIR}"
+
+# Check for CLAW.REZ
+if [ ! -f "CLAW.REZ" ]; then
+    # Also check if it exists in ~/.config/openclaw/CLAW.REZ
+    if [ -f "$HOME/.config/openclaw/CLAW.REZ" ]; then
+        cp "$HOME/.config/openclaw/CLAW.REZ" "${BUNDLE_DIR}/CLAW.REZ"
+    elif [ -f "$(dirname "$0")/../../../../CLAW.REZ" ]; then
+        cp "$(dirname "$0")/../../../../CLAW.REZ" "${BUNDLE_DIR}/CLAW.REZ"
+    fi
+fi
+
+if [ ! -f "CLAW.REZ" ]; then
+    echo "!!! CLAW.REZ is missing from: ${BUNDLE_DIR}" >&2
+    echo "!!! Please copy your original CLAW.REZ into this directory." >&2
+    osascript -e "display dialog \"ملف CLAW.REZ غير موجود داخل حزمة اللعبة!\n\nيرجى نسخ ملف CLAW.REZ الخاص بلعبة Captain Claw الأصلية داخل مجلد Resources للتطبيق:\n${BUNDLE_DIR}\" with title \"Captain Claw (OpenClaw)\" buttons {\"فتح المجلد\", \"إلغاء\"} default button \"فتح المجلد\" with icon stop" >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        open "${BUNDLE_DIR}"
+    fi
+    exit 1
+fi
+
+exec "$(dirname "$0")/openclaw-bin" "$@"

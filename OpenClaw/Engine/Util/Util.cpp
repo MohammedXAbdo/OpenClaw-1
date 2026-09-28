@@ -426,13 +426,21 @@ namespace Util
     int GetSoundDurationMs(const std::string& soundPath)
     {
         shared_ptr<Mix_Chunk> pSound = WavResourceLoader::LoadAndReturnSound(soundPath.c_str());
-        assert(pSound != nullptr);
+        if (!pSound)
+        {
+            return 0;
+        }
         return GetSoundDurationMs(pSound.get());
     }
 
 #ifndef __EMSCRIPTEN__
     int GetSoundDurationMs(Mix_Chunk* pSound)
     {
+        if (!pSound)
+        {
+            return 0;
+        }
+
         uint32 points = 0;
         uint32 frames = 0;
         int frequency = 0;

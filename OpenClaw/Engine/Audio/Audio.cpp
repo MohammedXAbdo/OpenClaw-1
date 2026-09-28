@@ -278,6 +278,11 @@ bool Audio::PlaySound(const char* soundData, size_t soundSize, const SoundProper
 
 bool Audio::PlaySound(Mix_Chunk* sound, const SoundProperties& soundProperties)
 {
+    if (!sound)
+    {
+        return false;
+    }
+
 #ifndef __EMSCRIPTEN__
     int chunkVolume = (int)((((float)soundProperties.volume) / 100.0f) * (float)m_SoundVolume);
 

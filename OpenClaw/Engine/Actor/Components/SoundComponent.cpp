@@ -1,5 +1,6 @@
 #include "SoundComponent.h"
 #include "../../GameApp/BaseGameApp.h"
+#include "../../Resource/ResourceMgr.h"
 #include "../../Resource/Loaders/WavLoader.h"
 
 const char* SoundComponent::g_Name = "SoundComponent";
@@ -19,7 +20,7 @@ bool SoundComponent::VInit(TiXmlElement* data)
         const char* soundsPath = animPathElem->GetText();
 
         std::vector<std::string> matchingSoundNames =
-            g_pApp->GetResourceCache()->Match(soundsPath);
+            g_pApp->GetResourceMgr()->VMatch(soundsPath);
 
         for (const std::string& soundPath : matchingSoundNames)
         {
@@ -27,7 +28,7 @@ bool SoundComponent::VInit(TiXmlElement* data)
             if (sound == nullptr)
             {
                 LOG_WARNING("Failed to load sound: " + soundPath);
-                return false;
+                continue;
             }
 
             std::string soundNameKey = StripPathAndExtension(soundPath);
