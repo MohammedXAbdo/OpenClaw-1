@@ -34,3 +34,4 @@ Build_Release/vim.exe.stackdump
 *.exp
 CLAW.REZ
 CLAW.REZ
+*.REZ
