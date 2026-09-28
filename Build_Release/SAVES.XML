@@ -11,5 +11,36 @@
             <MagicCount>5</MagicCount>
             <DynamiteCount>3</DynamiteCount>
         </Checkpoint>
+        <Checkpoint>
+            <CheckpointNumber>1</CheckpointNumber>
+            <Score>179900</Score>
+            <Health>30</Health>
+            <Lives>3</Lives>
+            <BulletCount>39</BulletCount>
+            <MagicCount>5</MagicCount>
+            <DynamiteCount>3</DynamiteCount>
+        </Checkpoint>
+        <Checkpoint>
+            <CheckpointNumber>2</CheckpointNumber>
+            <Score>364100</Score>
+            <Health>80</Health>
+            <Lives>1</Lives>
+            <BulletCount>39</BulletCount>
+            <MagicCount>5</MagicCount>
+            <DynamiteCount>3</DynamiteCount>
+        </Checkpoint>
+    </Level>
+    <Level>
+        <LevelNumber>2</LevelNumber>
+        <LevelName>Unknown</LevelName>
+        <Checkpoint>
+            <CheckpointNumber>0</CheckpointNumber>
+            <Score>400500</Score>
+            <Health>100</Health>
+            <Lives>1</Lives>
+            <BulletCount>39</BulletCount>
+            <MagicCount>5</MagicCount>
+            <DynamiteCount>3</DynamiteCount>
+        </Checkpoint>
     </Level>
 </GameSaves>

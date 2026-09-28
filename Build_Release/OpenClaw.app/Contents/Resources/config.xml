@@ -4,7 +4,7 @@
     <Scale>1</Scale>
     <UseVerticalSync>false</UseVerticalSync>
     <IsFullscreen>false</IsFullscreen>
-    <IsFullscreenDesktop>false</IsFullscreenDesktop>
+    <IsFullscreenDesktop>true</IsFullscreenDesktop>
   </Display>
   <Audio>
     <Frequency>44100</Frequency>
@@ -65,6 +65,11 @@
   </GlobalOptions>
   <ControlOptions>
     <UseAlternateControls>false</UseAlternateControls>
+    <!-- macOS friendly keys: Attack with Z (or Ctrl), Fire with X (or Alt), Jump with Space, Ammo with C (or Shift) -->
+    <KeyAttack>z</KeyAttack>
+    <KeyFire>x</KeyFire>
+    <KeyJump>space</KeyJump>
+    <KeyChangeAmmo>c</KeyChangeAmmo>
     <TouchScreen>
       <Enable>true</Enable>
       <!-- Distance to make a decision (separate tap/press and move events) -->

@@ -330,6 +330,27 @@ void BaseGameApp::OnEvent(SDL_Event& event)
         }
 
         case SDL_KEYDOWN:
+        {
+            if (event.key.repeat == 0)
+            {
+                if (event.key.keysym.sym == SDLK_F11 ||
+                    ((event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_KP_ENTER) && (event.key.keysym.mod & KMOD_ALT)))
+                {
+                    ToggleFullscreen();
+                    break;
+                }
+            }
+            if (m_pGame)
+            {
+                for (GameViewList::reverse_iterator iter = m_pGame->m_GameViews.rbegin();
+                    iter != m_pGame->m_GameViews.rend(); ++iter)
+                {
+                    (*iter)->VOnEvent(event);
+                }
+            }
+            break;
+        }
+
         case SDL_KEYUP:
         case SDL_TEXTEDITING:
         case SDL_TEXTINPUT:
@@ -420,6 +441,35 @@ void BaseGameApp::SetWindowSize(int width, int height, double scale)
 
     //if (scale)
     GetHumanView()->GetCamera()->SetScale(1, 1);
+}
+
+void BaseGameApp::ToggleFullscreen()
+{
+    if (!m_pWindow)
+        return;
+
+    uint32 flags = SDL_GetWindowFlags(m_pWindow);
+    if (flags & (SDL_WINDOW_FULLSCREEN | SDL_WINDOW_FULLSCREEN_DESKTOP))
+    {
+        SDL_SetWindowFullscreen(m_pWindow, 0);
+        m_GameOptions.isFullscreen = false;
+        m_GameOptions.isFullscreenDesktop = false;
+        SDL_SetWindowSize(m_pWindow, 1280, 960);
+        SDL_SetWindowPosition(m_pWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+        m_WindowSize.Set(1280, 960);
+    }
+    else
+    {
+        SDL_SetWindowFullscreen(m_pWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        m_GameOptions.isFullscreenDesktop = true;
+        SDL_GetWindowSize(m_pWindow, &m_GameOptions.windowWidth, &m_GameOptions.windowHeight);
+        m_WindowSize.Set(m_GameOptions.windowWidth, m_GameOptions.windowHeight);
+    }
+
+    if (m_pGame && GetHumanView() && GetHumanView()->GetCamera())
+    {
+        GetHumanView()->GetCamera()->SetSize(m_WindowSize.x, m_WindowSize.y);
+    }
 }
 
 HumanView* BaseGameApp::GetHumanView() const
@@ -697,6 +747,29 @@ bool BaseGameApp::LoadGameOptions(const char* inConfigFile)
     {
         ParseValueFromXmlElem(&m_ControlOptions.useAlternateControls,
                               pControlOptionsRootElem->FirstChildElement("UseAlternateControls"));
+
+        std::string attackKeyStr, fireKeyStr, jumpKeyStr, changeAmmoKeyStr;
+        if (ParseValueFromXmlElem(&attackKeyStr, pControlOptionsRootElem->FirstChildElement("KeyAttack")))
+        {
+            SDL_Keycode kc = SDL_GetKeyFromName(attackKeyStr.c_str());
+            if (kc != SDLK_UNKNOWN) m_ControlOptions.attackKey = kc;
+        }
+        if (ParseValueFromXmlElem(&fireKeyStr, pControlOptionsRootElem->FirstChildElement("KeyFire")))
+        {
+            SDL_Keycode kc = SDL_GetKeyFromName(fireKeyStr.c_str());
+            if (kc != SDLK_UNKNOWN) m_ControlOptions.fireKey = kc;
+        }
+        if (ParseValueFromXmlElem(&jumpKeyStr, pControlOptionsRootElem->FirstChildElement("KeyJump")))
+        {
+            SDL_Keycode kc = SDL_GetKeyFromName(jumpKeyStr.c_str());
+            if (kc != SDLK_UNKNOWN) m_ControlOptions.jumpKey = kc;
+        }
+        if (ParseValueFromXmlElem(&changeAmmoKeyStr, pControlOptionsRootElem->FirstChildElement("KeyChangeAmmo")))
+        {
+            SDL_Keycode kc = SDL_GetKeyFromName(changeAmmoKeyStr.c_str());
+            if (kc != SDLK_UNKNOWN) m_ControlOptions.changeAmmoKey = kc;
+        }
+
         if (TiXmlElement* pTouchScreenOptionsRootElem = pControlOptionsRootElem->FirstChildElement("TouchScreen"))
         {
             ParseValueFromXmlElem(&m_ControlOptions.touchScreen.enable,

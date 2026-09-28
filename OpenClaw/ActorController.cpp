@@ -112,7 +112,7 @@ void ActorController::OnUpdate(uint32 msDiff)
         }
 
         // Jumping
-        if (m_InputKeys[SDLK_SPACE])
+        if (m_InputKeys[SDLK_SPACE] || m_InputKeys[g_pApp->GetControlOptions()->jumpKey])
         {
             moveY -= m_Speed * (float)msDiff;
         }
@@ -139,7 +139,7 @@ bool ActorController::VOnKeyDown(SDL_Keycode key)
             HandleAction(ActionType_Change_Ammo_Type);
             return true;
         }
-        else if (SDL_GetScancodeFromKey(key) == SDL_SCANCODE_LSHIFT)
+        else if (SDL_GetScancodeFromKey(key) == SDL_SCANCODE_LSHIFT || SDL_GetScancodeFromKey(key) == SDL_SCANCODE_RSHIFT)
         {
             HandleAction(ActionType_Change_Ammo_Type);
             return true;
@@ -147,17 +147,22 @@ bool ActorController::VOnKeyDown(SDL_Keycode key)
     }
     else
     {
-        if (SDL_GetScancodeFromKey(key) == SDL_SCANCODE_LALT)
+        SDL_Scancode scancode = SDL_GetScancodeFromKey(key);
+        SDL_Keycode customAttack = g_pApp->GetControlOptions()->attackKey;
+        SDL_Keycode customFire = g_pApp->GetControlOptions()->fireKey;
+        SDL_Keycode customChangeAmmo = g_pApp->GetControlOptions()->changeAmmoKey;
+
+        if (scancode == SDL_SCANCODE_LALT || scancode == SDL_SCANCODE_RALT || key == SDLK_x || key == customFire)
         {
             HandleAction(ActionType_Fire);
             return true;
         }
-        else if (SDL_GetScancodeFromKey(key) == SDL_SCANCODE_LCTRL)
+        else if (scancode == SDL_SCANCODE_LCTRL || scancode == SDL_SCANCODE_RCTRL || key == SDLK_z || key == customAttack)
         {
             HandleAction(ActionType_Attack);
             return true;
         }
-        else if (SDL_GetScancodeFromKey(key) == SDL_SCANCODE_LSHIFT)
+        else if (scancode == SDL_SCANCODE_LSHIFT || scancode == SDL_SCANCODE_RSHIFT || key == SDLK_c || key == customChangeAmmo)
         {
             HandleAction(ActionType_Change_Ammo_Type);
             return true;
@@ -177,7 +182,10 @@ bool ActorController::VOnKeyUp(SDL_Keycode key)
     }
     else
     {
-        if (SDL_GetScancodeFromKey(key) == SDL_SCANCODE_LALT)
+        SDL_Scancode scancode = SDL_GetScancodeFromKey(key);
+        SDL_Keycode customFire = g_pApp->GetControlOptions()->fireKey;
+
+        if (scancode == SDL_SCANCODE_LALT || scancode == SDL_SCANCODE_RALT || key == SDLK_x || key == customFire)
         {
             shared_ptr<EventData_Actor_Fire_Ended> pFireEndedEvent(new EventData_Actor_Fire_Ended(m_pControlledObject->VGetProperties()->GetActorId()));
             IEventMgr::Get()->VTriggerEvent(pFireEndedEvent);

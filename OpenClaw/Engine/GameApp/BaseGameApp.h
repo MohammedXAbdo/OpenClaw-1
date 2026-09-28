@@ -174,11 +174,19 @@ struct ControlOptions
 {
     ControlOptions() {
         useAlternateControls = false;
+        attackKey = SDLK_z;
+        fireKey = SDLK_x;
+        jumpKey = SDLK_SPACE;
+        changeAmmoKey = SDLK_c;
         touchScreen.enable = false;
-        touchScreen.distanceThreshold = 0.1;
+        touchScreen.distanceThreshold = 0.1f;
         touchScreen.timeThreshold = 100;
     }
     bool useAlternateControls;
+    SDL_Keycode attackKey;
+    SDL_Keycode fireKey;
+    SDL_Keycode jumpKey;
+    SDL_Keycode changeAmmoKey;
     struct {
         bool enable;
         float distanceThreshold;
@@ -280,6 +288,7 @@ public:
     void SetWindowSize(int width, int height, double scale);
     Point GetWindowSizeScaled() { return Point(m_WindowSize.x / GetScale().x, m_WindowSize.y / GetScale().y); }
     void RequestWindowSizeChange(Point newSize, bool fullscreen);
+    void ToggleFullscreen();
 
     inline EventMgr* GetEventMgr() const { return m_pEventMgr; }
 
